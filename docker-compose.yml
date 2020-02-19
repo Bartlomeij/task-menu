@@ -1,0 +1,30 @@
+version: "3.2"
+services:
+  cobiro_task:
+    build: ./.docker
+    container_name: cobiro_task
+    volumes:
+      - .:/application:delegated
+      - ./.docker:/root/.docker:delegated
+    ports:
+      - 8077:80
+    networks:
+      - cobiro
+  cobiro_mysql:
+    image: mysql:5.7
+    container_name: cobiro_mysql
+    volumes:
+      - ./.docker/database/mysql:/var/lib/mysql
+    ports:
+      - 3309:3306
+    environment:
+      - MYSQL_DATABASE=cobiro
+      - MYSQL_HOST=mysql
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_USER=cobiro
+      - MYSQL_PASSWORD=secret
+    networks:
+      - cobiro
+
+networks:
+  cobiro:

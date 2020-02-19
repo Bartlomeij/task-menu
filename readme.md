@@ -1,5 +1,19 @@
 # Menu manager
 
+## How to run the task?
+You are able to run the task using Docker. Just run in the project directory:
+
+```
+docker-compose up -d
+```
+
+You have to wait for a while to make sure you have all dependencies installed via composer.
+Then, you can check if the project works properly (404 code is the proper one):
+
+```
+http://localhost:8077/
+```
+
 ## Table of Contents
 - [How to submit the task](#how-to-submit-the-task)
 - [Task description](#task-description)

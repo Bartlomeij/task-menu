@@ -12,6 +12,7 @@ RUN apt-get -y install php7.4-mbstring
 RUN apt-get -y install php7.4-xml
 RUN apt-get -y install php7.4-curl
 RUN apt-get -y install php7.4-mysql
+RUN apt-get -y install php7.4-sqlite3
 RUN apt-get -y install git unzip
 
 

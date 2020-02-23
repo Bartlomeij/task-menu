@@ -3,7 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Class Menu
+ * @package App
+ */
 class Menu extends Model
 {
     /**
@@ -85,5 +90,13 @@ class Menu extends Model
     public function setMaxChildren(int $max_children): void
     {
         $this->max_children = $max_children;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function items(): HasMany
+    {
+        return $this->hasMany(Item::class, 'menu_id', 'id');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Exceptions\EntityNotFoundException;
 use App\Factory\MenuFactory;
+use App\Item;
 use App\Menu;
 
 /**
@@ -11,6 +12,20 @@ use App\Menu;
  */
 class MenuService
 {
+    /**
+     * @var ItemService
+     */
+    private $itemService;
+
+    /**
+     * MenuService constructor.
+     * @param ItemService $itemService
+     */
+    public function __construct(ItemService $itemService)
+    {
+        $this->itemService = $itemService;
+    }
+
     /**
      * @param string $field
      * @param int $maxDepth
@@ -76,6 +91,53 @@ class MenuService
         $menu = Menu::find($menuId);
         if ($menu) {
             $menu->delete();
+        }
+    }
+
+    /**
+     * @param int $menuId
+     * @param array $items
+     * @return array
+     * @throws EntityNotFoundException
+     */
+    public function createMenuItems(int $menuId, array $items): array
+    {
+        $menu = $this->getMenuById($menuId);
+        $itemsArray = [];
+        foreach ($items as $item) {
+            $menuItem = $this->itemService->createItem($item['field']);
+            $menu->items()->save($menuItem);
+            $itemsArray[] = $menuItem;
+        }
+        return $itemsArray;
+    }
+
+    /**
+     * @param int $menuId
+     * @return array
+     * @throws EntityNotFoundException
+     */
+    public function getMenuItems(int $menuId): array
+    {
+        $menu = $this->getMenuById($menuId);
+        $itemsArray = [];
+
+        foreach ($menu->items()->get()->all() as $item) {
+            $itemsArray[] = $item;
+        }
+        return $itemsArray;
+    }
+
+    /**
+     * @param int $menuId
+     * @throws EntityNotFoundException
+     */
+    public function deleteMenuItems(int $menuId): void
+    {
+        /** @var Menu $menu */
+        $menu = Menu::find($menuId);
+        if ($menu) {
+            $menu->items()->delete();
         }
     }
 }

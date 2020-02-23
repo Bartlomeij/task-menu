@@ -16,24 +16,42 @@ class Item extends Model
     private string $field;
 
     /**
+     * @var string
+     */
+    private int $parent_id;
+
+    /**
      * @var array
      */
-    protected $fillable = ['field'];
+    protected $fillable = ['field', 'parent_id', 'children'];
 
     /**
      * @var array
      */
     protected $visible = ['field'];
 
+    /**
+     * @var array
+     */
+    protected $with = ['children'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function children(){
-        return $this->hasMany( Menu::class, 'parent_id', 'id' );
+        return $this->hasMany( Menu::class, 'id', 'parent_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function parent(){
-        return $this->hasOne( Menu::class, 'id', 'parent_id' );
+        return $this->hasOne( Menu::class, 'parent_id', 'id' );
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function menu()
     {
         return $this->belongsTo(Menu::class, 'menu_id', 'id');

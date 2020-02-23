@@ -31,4 +31,30 @@ class CreateMenuItemsTest extends TestCase
         ], $response->json());
         $response->assertStatus(201);
     }
+
+    /**
+     * @return void
+     */
+    public function testCreateMenuItemsWithChildren()
+    {
+        $menu = $this->createNewMenu('testField', 6, 7);
+        $response = $this->json('POST', '/api/menus/' . $menu->getId() . '/items', [
+            ['field' => 'value'],
+            ['field' => 'value2'],
+            ['field' => 'value3', 'children' => [
+                ['field' => 'childValue'],
+                ['field' => 'childValue2'],
+            ]],
+        ]);
+        var_dump($response->getContent());
+        $this->assertEquals([
+            ['field' => 'value'],
+            ['field' => 'value2'],
+            ['field' => 'value3', 'children' => [
+                ['field' => 'childValue'],
+                ['field' => 'childValue2'],
+            ]],
+        ], $response->json());
+        $response->assertStatus(201);
+    }
 }

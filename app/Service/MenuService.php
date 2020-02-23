@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Exceptions\EntityNotFoundException;
 use App\Factory\MenuFactory;
-use App\Item;
 use App\Menu;
 
 /**
@@ -105,7 +104,8 @@ class MenuService
         $menu = $this->getMenuById($menuId);
         $itemsArray = [];
         foreach ($items as $item) {
-            $menuItem = $this->itemService->createItem($item['field']);
+            $children = $item['children'] ?? null;
+            $menuItem = $this->itemService->createItem($item['field'], $children);
             $menu->items()->save($menuItem);
             $itemsArray[] = $menuItem;
         }
